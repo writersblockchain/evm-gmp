@@ -5,7 +5,7 @@ use cosmwasm_std::{
 
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg, Fee};
 
-use ethabi::{decode, encode, ParamType, Token};
+use ethabi::{encode, Token};
 use prost::Message;
 use serde_json_wasm::to_string;
 
@@ -56,9 +56,6 @@ pub fn send_message_evm(
      let message_payload = encode(&vec![
          Token::String(message),
      ]);
-
-    // // {info.funds} used to pay gas. Must only contain 1 token type.
-    // // let coin: cosmwasm_std::Coin = cw_utils::one_coin(&info).unwrap();
 
      let coin = &info.funds[0];
 
@@ -127,7 +124,6 @@ pub fn send_message_evm(
     // //         funds: (),
     // //     })),
     // // )
-    //Ok(Response::new())
 }
 
 #[entry_point]
