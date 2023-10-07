@@ -52,7 +52,7 @@ pub fn send_message_evm(
     destination_chain: String,
     destination_address: String,
     message: String,
-) -> Result<Response, ContractError> {
+) -> Result<Response, CustomContractError> {
     // Message payload to be received by the destination
      let message_payload = encode(&vec![
          Token::String(message),
