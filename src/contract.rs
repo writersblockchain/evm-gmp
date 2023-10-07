@@ -133,7 +133,5 @@ pub fn send_message_evm(
 #[entry_point]
 pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
-        QueryMsg::WhoWon { game } => to_binary(&query_who_won(deps, env, game)?),
-        QueryMsg::GameState { game } => to_binary(&query_game_state(deps, env, game)?),
     }
 }
