@@ -1,5 +1,5 @@
 use crate::state::{GameResult, RPS};
-use cosmwasm_std::{Addr, Coin};
+use cosmwasm_std::{CosmosMsg, StdError, Uint128};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -9,20 +9,10 @@ pub struct InstantiateMsg {}
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    NewGame {
-        player_name: String,
-        bet: Option<Coin>,
-    },
-    JoinGame {
-        player_name: String,
-        game_code: String,
-    },
-    SubmitChoice {
-        game_code: String,
-        choice: RPS,
-    },
-    PlayVsComputer {
-        choice: RPS,
+    SendMessageEvm {
+        destination_chain: String,
+        destination_address: String,
+        message: String,
     },
 }
 
