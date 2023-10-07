@@ -8,6 +8,10 @@ use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 use crate::executes::{join_game, new_game, submit_choice};
 use crate::queries::{query_game_state, query_who_won};
 
+use ethabi::{decode, encode, ParamType, Token};
+use prost::Message;
+use serde_json_wasm::to_string;
+
 #[entry_point]
 pub fn instantiate(
     _deps: DepsMut,
@@ -26,19 +30,105 @@ pub fn execute(
     msg: ExecuteMsg,
 ) -> Result<Response, CustomContractError> {
     match msg {
-        ExecuteMsg::NewGame { player_name, bet } => new_game(deps, env, info, bet, player_name),
-        ExecuteMsg::JoinGame {
-            game_code,
-            player_name,
-        } => join_game(deps, info, player_name, game_code),
-        ExecuteMsg::SubmitChoice { game_code, choice } => {
-            submit_choice(deps, info, env, game_code, choice)
-        }
-        ExecuteMsg::PlayVsComputer {choice: _} => {
-            // Complete with random computer choice
-            Ok(Response::new())
-        }
+        ExecuteMsg::SendMessageEvm {
+            destination_chain,
+            destination_address,
+            message,
+        } => send_message_evm(
+            deps,
+            env,
+            info,
+            destination_chain,
+            destination_address,
+            message,
+        ),
     }
+}
+
+pub fn send_message_evm(
+    _deps: DepsMut,
+    env: Env,
+    info: MessageInfo,
+    destination_chain: String,
+    destination_address: String,
+    message: String,
+) -> Result<Response, ContractError> {
+    // Message payload to be received by the destination
+     let message_payload = encode(&vec![
+         Token::String(message),
+     ]);
+
+    // // {info.funds} used to pay gas. Must only contain 1 token type.
+    // // let coin: cosmwasm_std::Coin = cw_utils::one_coin(&info).unwrap();
+
+     let coin = &info.funds[0];
+
+     let my_coin = crate::ibc::Coin {
+         denom: coin.denom.clone(),
+         amount: coin.amount.clone().to_string(),
+     };
+
+    let gmp_message: GmpMessage = GmpMessage {
+        destination_chain,
+        destination_address,
+        payload: message_payload.to_vec(),
+        type_: 1,
+        fee: Some(Fee {
+            amount: coin.clone().to_string(), // Make sure to handle amounts accurately
+            recipient: "axelar1aythygn6z5thymj6tmzfwekzh05ewg3l7d6y89".to_string(),
+        }),
+    };
+
+    // // let send_msg = to_binary(&TransferMsg {
+    // //     channel: "channel-3".to_string(),
+    // //     remote_address: "axelar1dv4u5k73pzqrxlzujxg3qp8kvc3pje7jtdvu72npnt5zhq05ejcsn5qme5"
+    // //         .to_string(),
+    // //     timeout: 10 * 60,
+    // //     memo: gmp_str,
+    // // })?;
+    // // let msg = secret_toolkit::snip20::send_msg_with_code_hash(
+    // //     "secret1yxjmepvyl2c25vnt53cr2dpn8amknwausxee83".to_string(),
+    // //     Some("2976a2577999168b89021ecb2e09c121737696f71c4342f9a922ce8654e98662".to_string()),
+    // //     Uint128::new(0),
+    // //     Some(send_msg), // msg goes here
+    // //     None,
+    // //     None,
+    // //     1,
+    // //     "638a3e1d50175fbcb8373cf801565283e3eb23d88a9b7b7f99fcc5eb1e6b561e".to_string(),
+    // //     "secret1vcau4rkn7mvfwl8hf0dqa9p0jr59983e3qqe3z".to_string(), /* snip20 contract originates from axelar*/
+    // // );
+
+    let memo = to_string(&gmp_message).map_err(|e| {
+        StdError::generic_err(format!("error generating Memo: {:?}", e))
+    })?;
+
+    let ibc_message = crate::ibc::MsgTransfer {
+        source_port: "wasm.secret1vfht4c30h4st7e254ww86p6whwyy0uux2ns5ck".to_string(),
+        source_channel: "channel-3".to_string(), // Testnet Osmosis to axelarnet: https://docs.axelar.dev/resources/testnet#ibc-channels
+        token: Some(my_coin.into()),
+        sender: env.contract.address.to_string(),
+        receiver: "axelar1dv4u5k73pzqrxlzujxg3qp8kvc3pje7jtdvu72npnt5zhq05ejcsn5qme5"
+            .to_string(),
+        timeout_height: None,
+        timeout_timestamp: env.block.time.plus_seconds(604_800u64).nanos(),
+        memo: memo,
+    };
+
+    let cosmos_msg = cosmwasm_std::CosmosMsg::Stargate {
+        type_url: "/ibc.applications.transfer.v1.MsgTransfer".to_string(),
+        value: Binary(ibc_message.encode_to_vec()),
+    };
+
+    Ok(Response::new().add_message(cosmos_msg))
+    // // Ok(
+    // //     Response::new().add_message(CosmosMsg::Wasm(cosmwasm_std::WasmMsg::Execute {
+    // //         contract_addr: (),
+    // //         code_hash: (),
+    // //         msg: (),
+    // //         funds: (),
+    // //     })),
+    // // )
+    //Ok(Response::new())
 }
 
 #[entry_point]

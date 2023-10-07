@@ -40,6 +40,11 @@ cosmwasm-storage = { git = "https://github.com/scrtlabs/cosmwasm", rev = "d2a02c
 
 cw-storage-plus = { version = "0.14.0", default-features = false }
 
+prost = { version = "0.12.1", default-features = false, features = [
+    "prost-derive",
+] }
+ethabi = { version = "18.0.0", default-features = false, features = [] }
+
 # secret-toolkit-storage = { git = "https://github.com/scrtlabs/secret-toolkit" }
 
 # custom deps
