@@ -73,7 +73,7 @@ pub fn send_message_evm(
         payload: message_payload.to_vec(),
         type_: 1,
         fee: Some(Fee {
-            amount: coin.clone().to_string(), // Make sure to handle amounts accurately
+            amount: coin.amount.clone().to_string(), // Make sure to handle amounts accurately
             recipient: "axelar1aythygn6z5thymj6tmzfwekzh05ewg3l7d6y89".to_string(),
         }),
     };
