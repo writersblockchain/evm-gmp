@@ -16,23 +16,32 @@ pub enum ExecuteMsg {
     },
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq, JsonSchema)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
-    WhoWon { game: String },
-    GameState { game: String },
+    GetStoredMessage {},
 }
 
-/// We define a custom struct for each query response
-#[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq)]
-pub struct CheckWinner {
-    pub winner: GameResult,
-    pub address: Option<Addr>,
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub struct GetStoredMessageResp {
+    pub sender: String,
+    pub message: String,
+}
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub struct Fee {
+    pub amount: String,
+    pub recipient: String,
+}
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub struct GmpMessage {
+    pub destination_chain: String,
+    pub destination_address: String,
+    pub payload: Vec<u8>,
+    #[serde(rename = "type")]
+    pub type_: i64,
+    pub fee: Option<Fee>,
 }
 
-/// We define a custom struct for each query response
-#[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq)]
-pub struct GameStateResponse {
-    pub game: String,
-    pub state: crate::state::GameStatus,
-}
