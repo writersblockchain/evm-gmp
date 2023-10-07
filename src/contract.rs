@@ -133,5 +133,6 @@ pub fn send_message_evm(
 #[entry_point]
 pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
-    }
+        QueryMsg::GetStoredMessage {  } => todo!(),
+   }
 }
