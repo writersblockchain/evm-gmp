@@ -5,12 +5,11 @@ use cosmwasm_std::{
 
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
-use crate::executes::{join_game, new_game, submit_choice};
-use crate::queries::{query_game_state, query_who_won};
-
 use ethabi::{decode, encode, ParamType, Token};
 use prost::Message;
 use serde_json_wasm::to_string;
+
+use crate::msg::GmpMessage;
 
 #[entry_point]
 pub fn instantiate(
