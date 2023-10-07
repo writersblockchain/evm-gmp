@@ -3,7 +3,7 @@ use cosmwasm_std::{
     entry_point, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult,CosmosMsg, StdError, Uint128
 };
 
-use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
+use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg, Fee};
 
 use ethabi::{decode, encode, ParamType, Token};
 use prost::Message;
