@@ -162,7 +162,7 @@ pub fn receive_message_evm(
         source_address,
         message,
     );
-
+    Ok(Response::new())
 }
 
 #[entry_point]
