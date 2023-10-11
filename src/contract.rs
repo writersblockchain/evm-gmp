@@ -154,20 +154,7 @@ pub fn receive_message_evm(
 
     let payload = decoded[1].to_string();
 
-    match payload {
-        ExecuteMsg::SendMessageEvm {
-            destination_chain,
-            destination_address,
-            message,
-        } => send_message_evm(
-            deps,
-            env,
-            info,
-            destination_chain,
-            destination_address,
-            message,
-        ),
-    }
+    execute(deps,env,info,decoded[1].to_string())
     
 }
 
