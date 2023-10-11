@@ -154,15 +154,14 @@ pub fn receive_message_evm(
 
     let message = decoded[1].to_string();
 
-    send_message_evm(
+    Ok(send_message_evm(
         deps,
         env,
         info,
         source_chain,
         source_address,
         message,
-    );
-    Ok(Response::new())
+    ))
 }
 
 #[entry_point]
