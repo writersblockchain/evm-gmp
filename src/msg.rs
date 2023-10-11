@@ -12,6 +12,11 @@ pub enum ExecuteMsg {
         destination_address: String,
         message: String,
     },
+    ReceiveMessageEvm {
+        source_chain: String,
+        source_address: String,
+        payload: String,
+    },
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
