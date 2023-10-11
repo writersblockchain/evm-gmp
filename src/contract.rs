@@ -152,10 +152,17 @@ pub fn receive_message_evm(
         payload.as_slice(),
     ).unwrap();
 
-    let payload = decoded[1].to_string();
+    let message = decoded[1].to_string();
 
-    execute(deps,env,info,decoded[1].to_string())
-    
+    send_message_evm(
+        deps,
+        env,
+        info,
+        source_chain,
+        source_address,
+        message,
+    ),
+
 }
 
 #[entry_point]
