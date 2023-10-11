@@ -15,7 +15,7 @@ pub enum ExecuteMsg {
     ReceiveMessageEvm {
         source_chain: String,
         source_address: String,
-        payload: String,
+        payload: Binary,
     },
 }
 

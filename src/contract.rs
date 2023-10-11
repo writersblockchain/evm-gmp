@@ -5,7 +5,7 @@ use cosmwasm_std::{
 
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg, Fee};
 
-use ethabi::{encode, Token};
+use ethabi::{encode, decode, ParamType,Token};
 use prost::Message;
 use serde_json_wasm::to_string;
 
