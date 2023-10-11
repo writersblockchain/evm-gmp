@@ -41,6 +41,17 @@ pub fn execute(
             destination_address,
             message,
         ),
+        ExecuteMsg::ReceiveMessageEvm {
+            source_chain,
+            source_address,
+            payload,
+        } => receive_message_evm(
+            deps, 
+            env,
+            info,
+            source_chain, 
+            source_address, 
+            payload),
     }
 }
 
@@ -124,6 +135,25 @@ pub fn send_message_evm(
     // //         funds: (),
     // //     })),
     // // )
+}
+
+pub fn receive_message_evm(
+    _deps: DepsMut,
+    env: Env,
+    info: MessageInfo,
+    source_chain: String,
+    source_address: String,
+    payload: Binary,
+) -> Result<Response, ContractError> {
+    // decode the payload
+    // executeMsgPayload: [sender, message]
+    let decoded = decode(
+        &vec![ParamType::String, ParamType::String],
+        payload.as_slice(),
+    );
+
+    execute(deps,env,info,decoded[1].to_string())
+    
 }
 
 #[entry_point]
