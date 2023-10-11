@@ -111,7 +111,7 @@ pub fn send_message_evm(
 
     let ibc_message = crate::ibc::MsgTransfer {
         source_port: "transfer".to_string(),
-        source_channel: "channel-20".to_string(), // Testnet Osmosis to axelarnet: https://docs.axelar.dev/resources/testnet#ibc-channels
+        source_channel: "channel-20".to_string(),
         token: Some(my_coin.into()),
         sender: env.contract.address.to_string(),
         receiver: "axelar1dv4u5k73pzqrxlzujxg3qp8kvc3pje7jtdvu72npnt5zhq05ejcsn5qme5"
@@ -154,14 +154,36 @@ pub fn receive_message_evm(
 
     let message = decoded[1].to_string();
 
-    Ok(Response::new().add_message(send_message_evm(
-        deps,
-        env,
-        info,
-        source_chain,
-        source_address,
-        message,
-    )))
+    let message_payload = encode(&vec![
+        Token::String(message),
+    ]);
+
+   let gmp_message: GmpMessage = GmpMessage {
+       destination_chain,
+       destination_address,
+       payload: message_payload.to_vec(),
+       type_: 1,
+       fee: None,
+   };
+
+   let ibc_message = crate::ibc::MsgTransfer {
+    source_port: "transfer".to_string(),
+    source_channel: "channel-20".to_string(),
+    token: None,
+    sender: env.contract.address.to_string(),
+    receiver: "axelar1dv4u5k73pzqrxlzujxg3qp8kvc3pje7jtdvu72npnt5zhq05ejcsn5qme5"
+        .to_string(),
+    timeout_height: None,
+    timeout_timestamp: env.block.time.plus_seconds(604_800u64).nanos(),
+    memo: memo,
+    };
+
+    let cosmos_msg = cosmwasm_std::CosmosMsg::Stargate {
+        type_url: "/ibc.applications.transfer.v1.MsgTransfer".to_string(),
+        value: Binary(ibc_message.encode_to_vec()),
+    };
+
+    Ok(Response::new().add_message(cosmos_msg))
 }
 
 #[entry_point]
