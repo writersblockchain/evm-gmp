@@ -161,7 +161,7 @@ pub fn receive_message_evm(
         source_chain,
         source_address,
         message,
-    ),
+    );
 
 }
 
