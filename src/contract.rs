@@ -56,7 +56,7 @@ pub fn execute(
 }
 
 pub fn send_message_evm(
-    _deps: DepsMut,
+    deps: DepsMut,
     env: Env,
     info: MessageInfo,
     destination_chain: String,
@@ -138,13 +138,13 @@ pub fn send_message_evm(
 }
 
 pub fn receive_message_evm(
-    _deps: DepsMut,
+    deps: DepsMut,
     env: Env,
     info: MessageInfo,
     source_chain: String,
     source_address: String,
     payload: Binary,
-) -> Result<Response, ContractError> {
+) -> Result<Response, CustomContractError> {
     // decode the payload
     // executeMsgPayload: [sender, message]
     let decoded = decode(
@@ -152,7 +152,22 @@ pub fn receive_message_evm(
         payload.as_slice(),
     );
 
-    execute(deps,env,info,decoded[1].to_string())
+    let payload = decoded[1].to_string();
+
+    match payload {
+        ExecuteMsg::SendMessageEvm {
+            destination_chain,
+            destination_address,
+            message,
+        } => send_message_evm(
+            deps,
+            env,
+            info,
+            destination_chain,
+            destination_address,
+            message,
+        ),
+    }
     
 }
 
