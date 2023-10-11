@@ -150,7 +150,7 @@ pub fn receive_message_evm(
     let decoded = decode(
         &vec![ParamType::String, ParamType::String],
         payload.as_slice(),
-    );
+    ).unwrap();
 
     let payload = decoded[1].to_string();
 
