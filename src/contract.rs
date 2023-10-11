@@ -158,12 +158,22 @@ pub fn receive_message_evm(
         Token::String(message),
     ]);
 
+    let coin = &info.funds[0];
+
+    let my_coin = crate::ibc::Coin {
+        denom: coin.denom.clone(),
+        amount: coin.amount.clone().to_string(),
+    };
+
    let gmp_message: GmpMessage = GmpMessage {
        destination_chain: source_chain,
        destination_address: source_address,
        payload: message_payload.to_vec(),
        type_: 1,
-       fee: None,
+       fee: Some(Fee {
+        amount: coin.amount.clone().to_string(), // Make sure to handle amounts accurately
+        recipient: "axelar1aythygn6z5thymj6tmzfwekzh05ewg3l7d6y89".to_string(),
+        }),
    };
 
     let memo = to_string(&gmp_message).map_err(|e| {
@@ -173,7 +183,7 @@ pub fn receive_message_evm(
    let ibc_message = crate::ibc::MsgTransfer {
     source_port: "transfer".to_string(),
     source_channel: "channel-20".to_string(),
-    token: None,
+    token: Some(my_coin.into()),
     sender: env.contract.address.to_string(),
     receiver: "axelar1dv4u5k73pzqrxlzujxg3qp8kvc3pje7jtdvu72npnt5zhq05ejcsn5qme5"
         .to_string(),
