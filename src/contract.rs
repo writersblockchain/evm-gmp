@@ -159,12 +159,16 @@ pub fn receive_message_evm(
     ]);
 
    let gmp_message: GmpMessage = GmpMessage {
-       destination_chain,
-       destination_address,
+       destination_chain: source_chain,
+       destination_address: source_address,
        payload: message_payload.to_vec(),
        type_: 1,
        fee: None,
    };
+
+    let memo = to_string(&gmp_message).map_err(|e| {
+        StdError::generic_err(format!("error generating Memo: {:?}", e))
+    })?;
 
    let ibc_message = crate::ibc::MsgTransfer {
     source_port: "transfer".to_string(),
