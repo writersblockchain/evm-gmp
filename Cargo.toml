@@ -35,19 +35,19 @@ schema = ["cosmwasm-schema"]
 [dependencies]
 serde = { version = "1.0.147", default-features = false, features = ["derive"] }
 schemars = "0.8.11"
-cosmwasm-std = { git = "https://github.com/scrtlabs/cosmwasm", rev = "d2a02cf9c734c1aa86b0d1c6607ece4317892dbb", features = ["random",    
-"stargate",
-    "ibc3"] }
+cosmwasm-std = { git = "https://github.com/scrtlabs/cosmwasm", rev = "d2a02cf9c734c1aa86b0d1c6607ece4317892dbb", features = [
+  "random",
+  "stargate",
+  "ibc3",
+] }
 cosmwasm-storage = { git = "https://github.com/scrtlabs/cosmwasm", rev = "d2a02cf9c734c1aa86b0d1c6607ece4317892dbb" }
-serde-json-wasm = "1.0.0"
 cw-storage-plus = { version = "0.14.0", default-features = false }
+serde-json-wasm = "1.0.0"
 
 prost = { version = "0.12.1", default-features = false, features = [
-    "prost-derive",
+  "prost-derive",
 ] }
 ethabi = { version = "18.0.0", default-features = false, features = [] }
-
-# secret-toolkit-storage = { git = "https://github.com/scrtlabs/secret-toolkit" }
 
 # custom deps
 base32 = "0.4.0"
@@ -66,5 +66,3 @@ cosmwasm-std = { git = "https://github.com/scrtlabs/cosmwasm", rev = "d2a02cf9c7
 [[bin]]
 name = "schema"
 required-features = ["schema"]
-
-

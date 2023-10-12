@@ -2,6 +2,8 @@
 /target
 Cargo.lock
 contract.wasm*
+contract.wasm.gz*
+.env*
 
 # Cargo+Git helper file (https://github.com/rust-lang/cargo/blob/0.44.1/src/cargo/sources/git/utils.rs#L320-L327)
 .cargo-ok
@@ -55,7 +57,7 @@ bower_components
 build/Release
 
 # Dependency directories
-node_modules/
+node_modules/*
 jspm_packages/
 
 # TypeScript v1 declaration files
