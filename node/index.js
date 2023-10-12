@@ -132,15 +132,4 @@ get_stored_message();
 // Polygon Mainnet contract:
 // 0x13ACd5794A3136E7fAc8f9727259930fcab1290F
 
-// let OldContractAddress = "secret16c4k2t99mvcetd4p5k6kzjkcqaj3g53y2jd6z8";
-
-// const sdk = new AxelarQueryAPI({
-//   environment: "mainnet",
-// });
-
-// const api = new AxelarQueryAPI(sdk);
-
-// async function main() {}
-
-// main();
 // 400000000000000000

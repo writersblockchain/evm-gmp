@@ -1,6 +1,6 @@
+use cosmwasm_std::Binary;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-use cosmwasm_std::Binary;
 
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {}
@@ -48,4 +48,3 @@ pub struct GmpMessage {
     pub type_: i64,
     pub fee: Option<Fee>,
 }
-
