@@ -14,10 +14,10 @@ const wallet = new Wallet(process.env.MNEMONIC);
 
 const contract_wasm = fs.readFileSync("../contract.wasm.gz");
 
-// let codeId = 1309;
-// let contractCodeHash =
-//   "9679a9aae3f9e5cc65a1bfbb9f2613cef7cf97e47bbc41cb8138c64c73e9757a";
-// let contractAddress = "secret1z2y0k356wfq8kgf22e7d2dqdz9a5r0kfrvwlev";
+let codeId = 1311;
+let contractCodeHash =
+  "cab83bbdd842a3092e35bcc83df9bb761771b4fca666e8d96a067589d9f718c1";
+let contractAddress = "secret1q4pk525xgpunrj8zysj0rtpd3aktgg7hgdrl34";
 
 const secretjs = new SecretNetworkClient({
   chainId: "secret-4",
@@ -102,7 +102,9 @@ let send_message_evm = async () => {
         },
       },
       code_hash: contractCodeHash,
-      sent_funds: coinsFromString("1uscrt"),
+      sent_funds: coinsFromString(
+        "1ibc/A7CBAF118AC24A896DC46A098FE9FA2A588A36A2F0239913229D3A11D92E7B2E"
+      ),
     },
     { gasLimit: 100_000 }
   );
@@ -123,12 +125,14 @@ let get_stored_message = async () => {
   console.log(query);
 };
 
-// get_stored_message();
+get_stored_message();
 
 // secretcli tx wasm execute "secret1wpmsu5arwp80hqgekan9j693eshphzfgh9s869" '{"send_message_evm": {"destination_chain": "Polygon", "destination_address":"0x7a26f97170BA95C1C21FBe941902D0Ca49A798dF","message":"hello"}}' --amount 1uscrt --from pulsar3-test
 
 // Polygon Mainnet contract:
 // 0x13ACd5794A3136E7fAc8f9727259930fcab1290F
+
+// let OldContractAddress = "secret16c4k2t99mvcetd4p5k6kzjkcqaj3g53y2jd6z8";
 
 // const sdk = new AxelarQueryAPI({
 //   environment: "mainnet",
@@ -139,3 +143,4 @@ let get_stored_message = async () => {
 // async function main() {}
 
 // main();
+// 400000000000000000
