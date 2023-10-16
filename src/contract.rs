@@ -1,5 +1,5 @@
 use cosmwasm_std::{
-    entry_point, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdError, StdResult,
+    entry_point, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult,
 };
 
 use crate::{
@@ -64,7 +64,10 @@ pub fn send_message_evm(
     message: String,
 ) -> Result<Response, CustomContractError> {
     // Message payload to be received by the destination
-    let message_payload = encode(&vec![Token::String(message)]);
+    let message_payload = encode(&vec![
+        Token::String(info.sender.to_string()),
+        Token::String(message),
+    ]);
 
     let coin = &info.funds[0];
 
@@ -84,8 +87,7 @@ pub fn send_message_evm(
         }),
     };
 
-    let memo = to_string(&gmp_message)
-        .map_err(|e| StdError::generic_err(format!("error generating Memo: {:?}", e)))?;
+    let memo = to_string(&gmp_message).unwrap();
 
     let ibc_message = crate::ibc::MsgTransfer {
         source_port: "transfer".to_string(),

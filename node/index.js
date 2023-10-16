@@ -14,10 +14,10 @@ const wallet = new Wallet(process.env.MNEMONIC);
 
 const contract_wasm = fs.readFileSync("../contract.wasm.gz");
 
-let codeId = 1311;
+let codeId = 1317;
 let contractCodeHash =
-  "cab83bbdd842a3092e35bcc83df9bb761771b4fca666e8d96a067589d9f718c1";
-let contractAddress = "secret1q4pk525xgpunrj8zysj0rtpd3aktgg7hgdrl34";
+  "7ce84114e0d1401a8bdf37717a0d1389e348cf2ac26e2c79a1e4b301452c71e6";
+let contractAddress = "secret1k0s02fqqmlhq4g7qmlq9w76p4g9htwelszlk2y";
 
 const secretjs = new SecretNetworkClient({
   chainId: "secret-4",
@@ -98,12 +98,12 @@ let send_message_evm = async () => {
         send_message_evm: {
           destination_chain: "Polygon",
           destination_address: "0x13ACd5794A3136E7fAc8f9727259930fcab1290F",
-          message: "october 11 seanrad",
+          message: "october 14 seanrad",
         },
       },
       code_hash: contractCodeHash,
       sent_funds: coinsFromString(
-        "1ibc/A7CBAF118AC24A896DC46A098FE9FA2A588A36A2F0239913229D3A11D92E7B2E"
+        "1000000ibc/A7CBAF118AC24A896DC46A098FE9FA2A588A36A2F0239913229D3A11D92E7B2E"
       ),
     },
     { gasLimit: 100_000 }
@@ -127,9 +127,12 @@ let get_stored_message = async () => {
 
 get_stored_message();
 
-// secretcli tx wasm execute "secret1wpmsu5arwp80hqgekan9j693eshphzfgh9s869" '{"send_message_evm": {"destination_chain": "Polygon", "destination_address":"0x7a26f97170BA95C1C21FBe941902D0Ca49A798dF","message":"hello"}}' --amount 1uscrt --from pulsar3-test
+// secretcli tx wasm execute "secret1k0s02fqqmlhq4g7qmlq9w76p4g9htwelszlk2y" '{"send_message_evm":{"destination_chain":"Polygon","destination_address":"0x13ACd5794A3136E7fAc8f9727259930fcab1290F","message":"seanrad"}}' --amount 150000ibc/A7CBAF118AC24A896DC46A098FE9FA2A588A36A2F0239913229D3A11D92E7B2E --from pulsar3-test
 
 // Polygon Mainnet contract:
 // 0x13ACd5794A3136E7fAc8f9727259930fcab1290F
 
 // 400000000000000000
+// https://axelarscan.io/gmp/0xc259627a6ca5ea786184d452802bcbf8d16df7c244dda3cf544e556c59eb0a85:634
+// https://polygonscan.com/address/0x13ACd5794A3136E7fAc8f9727259930fcab1290F
+// https://axelarscan.io/gmp/924D3C528404ECD8E5CF7A569F4D85EC58A808890EF7F08A3CB41ED95812EF51
